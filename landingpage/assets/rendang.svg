@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Rendang sapi</title>
+  <desc id="desc">Lauk rendang sapi berwarna cokelat gelap dengan bumbu pekat.</desc>
+  <rect width="640" height="420" fill="#f4eadc"/>
+  <rect y="300" width="640" height="120" fill="#7c2f24"/>
+  <ellipse cx="320" cy="234" rx="210" ry="126" fill="#fffaf0" stroke="#d8c6ae" stroke-width="8"/>
+  <g fill="#4b241b">
+    <path d="M211 198c43-42 124-30 142 25 12 37-24 77-81 75-50-2-85-36-75-75 2-9 7-18 14-25z"/>
+    <path d="M332 168c55-32 136-4 148 51 9 42-36 78-94 67-56-11-83-57-61-96 3-7 6-14 7-22z"/>
+    <path d="M256 122c47-21 106 4 112 49 6 40-32 69-78 59-47-11-69-52-49-87 4-8 9-15 15-21z"/>
+  </g>
+  <g fill="#8b4a34" opacity=".6">
+    <circle cx="257" cy="218" r="10"/>
+    <circle cx="341" cy="216" r="8"/>
+    <circle cx="404" cy="240" r="9"/>
+    <circle cx="303" cy="170" r="7"/>
+  </g>
+  <path d="M164 304c91-25 203-23 318 0" fill="none" stroke="#d49a2a" stroke-width="12" stroke-linecap="round" opacity=".7"/>
+</svg>

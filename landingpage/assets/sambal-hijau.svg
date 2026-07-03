@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Sambal hijau</title>
+  <desc id="desc">Porsi sambal hijau khas Padang.</desc>
+  <rect width="640" height="420" fill="#eef3e5"/>
+  <rect y="300" width="640" height="120" fill="#1e5837"/>
+  <ellipse cx="320" cy="236" rx="196" ry="116" fill="#fffaf0" stroke="#ccd9cf" stroke-width="8"/>
+  <path d="M212 234c35-60 134-85 221-44 58 28 73 83 29 119-50 41-153 35-219-13-29-21-40-42-31-62z" fill="#2f8a4d"/>
+  <g fill="#8fb24c">
+    <circle cx="269" cy="229" r="18"/>
+    <circle cx="325" cy="207" r="16"/>
+    <circle cx="385" cy="239" r="20"/>
+    <circle cx="314" cy="280" r="17"/>
+  </g>
+  <g stroke="#d4cf72" stroke-width="10" stroke-linecap="round">
+    <path d="M248 253c36-18 73-24 111-19"/>
+    <path d="M331 281c34-8 63-22 88-43"/>
+  </g>
+</svg>

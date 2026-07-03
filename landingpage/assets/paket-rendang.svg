@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Paket rendang komplit</title>
+  <desc id="desc">Piring nasi Padang dengan rendang, daun singkong, sambal hijau, dan kuah gulai.</desc>
+  <rect width="640" height="420" fill="#f5efe2"/>
+  <rect y="302" width="640" height="118" fill="#d49a2a"/>
+  <ellipse cx="320" cy="230" rx="212" ry="132" fill="#fffaf0" stroke="#d3c6aa" stroke-width="8"/>
+  <ellipse cx="320" cy="232" rx="178" ry="104" fill="#f9edd7"/>
+  <circle cx="262" cy="204" r="74" fill="#ffffff"/>
+  <path d="M206 196c33-38 89-40 116 3 16 26 3 62-26 76-32 15-72 3-91-25-11-16-11-36 1-54z" fill="#f8f4e9"/>
+  <g fill="#4b241b">
+    <path d="M343 180c39-31 103-15 115 23 10 32-23 66-69 66-42 0-69-28-57-60 3-9 7-20 11-29z"/>
+    <path d="M387 154c32-12 70 8 75 37 6 32-28 56-67 48-34-8-51-36-37-61 6-10 15-18 29-24z"/>
+  </g>
+  <g fill="#6a3326" opacity=".55">
+    <circle cx="376" cy="201" r="8"/>
+    <circle cx="421" cy="214" r="7"/>
+    <circle cx="392" cy="236" r="6"/>
+  </g>
+  <path d="M168 254c34-28 78-36 120-20 20 8 36 21 48 39-68 41-134 39-198-5 7-5 17-10 30-14z" fill="#2f7a48"/>
+  <path d="M179 257c36 8 72 8 108 0" fill="none" stroke="#9ec05f" stroke-width="7" stroke-linecap="round"/>
+  <path d="M434 262c26-26 70-22 88 6-19 21-58 29-89 17-12-5-12-14 1-23z" fill="#2e8b4b"/>
+  <path d="M436 266c24 7 49 7 74-1" fill="none" stroke="#b7c95a" stroke-width="6" stroke-linecap="round"/>
+  <path d="M412 116c48 11 84 39 101 82" fill="none" stroke="#b83228" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="520" cy="204" r="38" fill="#e7b743"/>
+  <circle cx="520" cy="204" r="24" fill="#f4d079"/>
+  <path d="M87 337c130-32 278-39 468 0" fill="none" stroke="#9f4a22" stroke-width="13" stroke-linecap="round" opacity=".5"/>
+</svg>

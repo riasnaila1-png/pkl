@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Ayam bakar Padang</title>
+  <desc id="desc">Ayam bakar Padang dengan bumbu santan dan garis panggangan.</desc>
+  <rect width="640" height="420" fill="#f5efe2"/>
+  <rect y="300" width="640" height="120" fill="#287347"/>
+  <ellipse cx="320" cy="234" rx="210" ry="126" fill="#fffaf0" stroke="#d8c6ae" stroke-width="8"/>
+  <path d="M228 180c58-44 157-30 197 34 34 54-5 105-81 108-73 3-135-43-132-99 1-16 6-31 16-43z" fill="#a94f23"/>
+  <path d="M392 148c41-4 75 22 80 59 5 35-23 64-63 65-40 2-76-28-77-66-1-33 22-55 60-58z" fill="#c06a2a"/>
+  <g stroke="#5c2c1b" stroke-width="12" stroke-linecap="round" opacity=".75">
+    <path d="M254 203c44 30 93 42 147 36"/>
+    <path d="M233 242c50 29 105 40 165 32"/>
+    <path d="M350 174c28 34 65 50 111 48"/>
+  </g>
+  <circle cx="445" cy="275" r="35" fill="#b83228"/>
+  <path d="M160 288c36-27 82-33 130-18" fill="none" stroke="#2f7a48" stroke-width="19" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rangkiang Padang - Pemesanan Nasi Padang</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Rumah Makan Rangkiang Padang</p>
+        <h1>Pesan Nasi Padang</h1>
+      </div>
+      <nav class="tabs" aria-label="Navigasi utama">
+        <button class="tab active" data-view="customer">Pelanggan</button>
+        <button class="tab" data-view="orders">Pesanan</button>
+        <button class="tab" data-view="admin">Admin</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="customerView" class="view active">
+        <div class="summary-band">
+          <div>
+            <span class="label">Buka hari ini</span>
+            <strong>08.00 - 21.00</strong>
+          </div>
+          <div>
+            <span class="label">Estimasi siap</span>
+            <strong>18-25 menit</strong>
+          </div>
+          <div>
+            <span class="label">Ongkir area dekat</span>
+            <strong>Rp8.000</strong>
+          </div>
+        </div>
+
+        <div class="customer-layout">
+          <section class="menu-area" aria-labelledby="menuTitle">
+            <div class="section-head">
+              <div>
+                <h2 id="menuTitle">Menu tersedia</h2>
+                <p>Pilih paket, lauk, sayur, minuman, dan tambahan sesuai selera.</p>
+              </div>
+              <input id="searchMenu" class="search" type="search" placeholder="Cari rendang, ayam, es teh..." />
+            </div>
+
+            <div id="categoryFilters" class="filters" aria-label="Filter kategori"></div>
+            <div id="menuGrid" class="menu-grid"></div>
+          </section>
+
+          <aside class="cart-panel" aria-labelledby="cartTitle">
+            <div class="section-head compact">
+              <div>
+                <h2 id="cartTitle">Keranjang</h2>
+                <p id="cartCount">Belum ada item</p>
+              </div>
+              <button id="clearCartBtn" class="icon-btn" title="Kosongkan keranjang">x</button>
+            </div>
+
+            <div id="cartItems" class="cart-items"></div>
+
+            <form id="checkoutForm" class="checkout-form">
+              <label>
+                Nama pelanggan
+                <input id="customerName" type="text" value="Afrianto" required />
+              </label>
+              <label>
+                Nomor HP
+                <input id="customerPhone" type="tel" value="081234567890" required />
+              </label>
+              <div class="segmented" role="group" aria-label="Metode pemesanan">
+                <label><input type="radio" name="fulfillment" value="Pickup" checked /> Pickup</label>
+                <label><input type="radio" name="fulfillment" value="Delivery" /> Delivery</label>
+              </div>
+              <label id="addressField" class="hidden">
+                Alamat pengiriman
+                <textarea id="deliveryAddress" rows="3" placeholder="Tulis alamat lengkap"></textarea>
+              </label>
+              <label>
+                Pembayaran
+                <select id="paymentMethod">
+                  <option>COD</option>
+                  <option>Transfer bank manual</option>
+                </select>
+              </label>
+              <label>
+                Catatan pesanan
+                <textarea id="orderNote" rows="3" placeholder="Contoh: kuah dipisah, tidak pedas"></textarea>
+              </label>
+
+              <div class="totals">
+                <span>Subtotal</span>
+                <strong id="subtotalText">Rp0</strong>
+                <span>Ongkir</span>
+                <strong id="shippingText">Rp0</strong>
+                <span>Total</span>
+                <strong id="totalText">Rp0</strong>
+              </div>
+              <button class="primary-btn" type="submit">Buat Pesanan</button>
+            </form>
+          </aside>
+        </div>
+      </section>
+
+      <section id="ordersView" class="view">
+        <div class="section-head">
+          <div>
+            <h2>Status dan Riwayat Pesanan</h2>
+            <p>Lihat status pesanan pelanggan dan lakukan pesan ulang dari riwayat.</p>
+          </div>
+        </div>
+        <div id="orderList" class="order-list"></div>
+      </section>
+
+      <section id="adminView" class="view">
+        <div class="admin-grid">
+          <section>
+            <div class="section-head">
+              <div>
+                <h2>Dashboard admin</h2>
+                <p>Terima, proses, batalkan, dan selesaikan pesanan.</p>
+              </div>
+            </div>
+            <div id="adminOrders" class="order-list"></div>
+          </section>
+
+          <aside>
+            <section class="report-panel">
+              <h2>Laporan singkat</h2>
+              <div id="reportStats" class="stats"></div>
+            </section>
+
+            <section class="stock-panel">
+              <h2>Manajemen stok</h2>
+              <div id="stockList" class="stock-list"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="itemDialog">
+      <form id="itemForm" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <p id="dialogCategory" class="eyebrow"></p>
+            <h2 id="dialogTitle"></h2>
+            <p id="dialogDescription"></p>
+          </div>
+          <button class="icon-btn" type="button" data-close-dialog title="Tutup">x</button>
+        </div>
+
+        <div class="dialog-preview" id="dialogPreview"></div>
+
+        <div class="form-grid">
+          <label>
+            Porsi nasi
+            <select id="riceOption">
+              <option>Normal</option>
+              <option>Setengah</option>
+              <option>Tanpa nasi</option>
+            </select>
+          </label>
+          <label>
+            Sambal
+            <select id="sambalOption">
+              <option>Hijau</option>
+              <option>Merah</option>
+              <option>Campur</option>
+              <option>Tanpa sambal</option>
+            </select>
+          </label>
+          <label>
+            Kuah
+            <select id="gravyOption">
+              <option>Normal</option>
+              <option>Banyak</option>
+              <option>Sedikit</option>
+              <option>Tanpa kuah</option>
+            </select>
+          </label>
+          <label>
+            Jumlah
+            <input id="itemQty" type="number" min="1" value="1" />
+          </label>
+        </div>
+
+        <label>
+          Catatan item
+          <textarea id="itemNote" rows="3" placeholder="Contoh: rendang dipotong kecil"></textarea>
+        </label>
+
+        <menu>
+          <button type="button" data-close-dialog>Batal</button>
+          <button id="addItemBtn" class="primary-btn" value="default">Tambah ke Keranjang</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

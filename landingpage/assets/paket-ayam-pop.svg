@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Paket ayam pop</title>
+  <desc id="desc">Piring nasi Padang dengan ayam pop, sambal merah, daun singkong, dan kuah.</desc>
+  <rect width="640" height="420" fill="#eef3f0"/>
+  <rect y="300" width="640" height="120" fill="#426b8f"/>
+  <ellipse cx="320" cy="230" rx="214" ry="132" fill="#fffaf0" stroke="#ccd9cf" stroke-width="8"/>
+  <ellipse cx="320" cy="230" rx="178" ry="102" fill="#f7ead4"/>
+  <circle cx="248" cy="202" r="76" fill="#fff"/>
+  <path d="M199 195c39-38 96-36 122 8 18 31 1 65-35 77-35 11-75-6-90-38-8-17-7-33 3-47z" fill="#f7f1e4"/>
+  <path d="M363 169c42-11 84 9 96 43 12 36-17 70-60 72-43 2-79-28-78-66 0-25 15-42 42-49z" fill="#dfbe78"/>
+  <path d="M407 149c24 1 44 17 52 39 8 24-8 46-34 49-26 4-52-13-59-38-7-26 9-50 41-50z" fill="#e8cc8c"/>
+  <path d="M356 188c44 9 78 31 102 66" fill="none" stroke="#c2944e" stroke-width="10" stroke-linecap="round"/>
+  <path d="M417 278c32-21 77-16 100 12-22 20-63 27-97 12-13-6-14-14-3-24z" fill="#32794b"/>
+  <path d="M151 256c32-28 84-36 127-16 19 9 34 23 45 42-63 36-127 34-190-6 4-7 10-14 18-20z" fill="#287347"/>
+  <path d="M453 152c31 15 55 37 70 67" fill="none" stroke="#b83228" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="502" cy="226" r="34" fill="#b83228"/>
+  <circle cx="515" cy="216" r="9" fill="#e65c46"/>
+  <circle cx="490" cy="238" r="7" fill="#7b201c"/>
+  <path d="M84 337c137-31 279-38 471 0" fill="none" stroke="#d49a2a" stroke-width="13" stroke-linecap="round" opacity=".55"/>
+</svg>

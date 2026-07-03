@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Gulai kikil</title>
+  <desc id="desc">Mangkuk gulai kikil dengan kuah kuning santan.</desc>
+  <rect width="640" height="420" fill="#f8f1dd"/>
+  <rect y="300" width="640" height="120" fill="#d49a2a"/>
+  <ellipse cx="320" cy="240" rx="210" ry="118" fill="#fffaf0" stroke="#d8c6ae" stroke-width="8"/>
+  <ellipse cx="320" cy="229" rx="170" ry="85" fill="#e6b53e"/>
+  <g fill="#f4d37a">
+    <path d="M221 209c28-29 80-21 92 15 10 31-22 59-60 51-35-8-51-41-32-66z"/>
+    <path d="M331 178c37-20 88-2 98 35 9 34-23 65-68 60-42-5-65-40-51-72 4-9 11-17 21-23z"/>
+    <path d="M374 243c36-24 86-14 100 21 12 31-18 63-60 62-44-1-73-35-59-66 4-7 10-13 19-17z"/>
+  </g>
+  <g fill="#8b4a34" opacity=".4">
+    <circle cx="284" cy="238" r="8"/>
+    <circle cx="385" cy="220" r="7"/>
+    <circle cx="420" cy="281" r="8"/>
+  </g>
+  <path d="M191 177c76-27 159-29 249-3" fill="none" stroke="#f7dc92" stroke-width="13" stroke-linecap="round" opacity=".75"/>
+</svg>
