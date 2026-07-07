@@ -447,6 +447,27 @@ textarea {
   min-width: 98px;
 }
 
+.stock-row {
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.stock-row > div {
+  min-width: 180px;
+  flex: 1;
+}
+
+.stock-form {
+  display: grid;
+  grid-template-columns: 76px auto;
+  gap: 8px;
+}
+
+.stock-form input {
+  min-width: 0;
+  padding-inline: 10px;
+}
+
 dialog {
   width: min(620px, calc(100vw - 28px));
   border: 0;

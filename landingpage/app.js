@@ -22,6 +22,7 @@ const defaultMenus = [
     category: "Paket",
     description: "Nasi, rendang sapi, daun singkong, sambal hijau, dan kuah gulai.",
     price: 32000,
+    stock: 12,
     available: true,
     color: "linear-gradient(135deg, #7c2f24, #d49a2a)",
     image: "assets/paket-rendang.svg",
@@ -32,6 +33,7 @@ const defaultMenus = [
     category: "Paket",
     description: "Ayam pop lembut dengan nasi, sayur, sambal merah, dan kuah.",
     price: 28000,
+    stock: 10,
     available: true,
     color: "linear-gradient(135deg, #d9b56d, #426b8f)",
     image: "assets/paket-ayam-pop.svg",
@@ -42,6 +44,7 @@ const defaultMenus = [
     category: "Lauk",
     description: "Potongan daging sapi berbumbu pekat, dimasak lama sampai empuk.",
     price: 21000,
+    stock: 8,
     available: true,
     color: "linear-gradient(135deg, #4d261f, #b83228)",
     image: "assets/rendang.svg",
@@ -52,6 +55,7 @@ const defaultMenus = [
     category: "Lauk",
     description: "Ayam berbumbu santan, dibakar harum, cocok dengan sambal hijau.",
     price: 19000,
+    stock: 10,
     available: true,
     color: "linear-gradient(135deg, #9f4a22, #287347)",
     image: "assets/ayam-bakar.svg",
@@ -62,6 +66,7 @@ const defaultMenus = [
     category: "Lauk",
     description: "Kikil kenyal dalam kuah gulai kuning yang gurih.",
     price: 22000,
+    stock: 0,
     available: false,
     color: "linear-gradient(135deg, #d49a2a, #6f7f35)",
     image: "assets/gulai-kikil.svg",
@@ -72,6 +77,7 @@ const defaultMenus = [
     category: "Sayur",
     description: "Rebusan daun singkong segar untuk pelengkap lauk.",
     price: 7000,
+    stock: 15,
     available: true,
     color: "linear-gradient(135deg, #287347, #89a84f)",
     image: "assets/daun-singkong.svg",
@@ -82,6 +88,7 @@ const defaultMenus = [
     category: "Sambal",
     description: "Sambal cabai hijau khas Padang dengan rasa segar dan gurih.",
     price: 4000,
+    stock: 20,
     available: true,
     color: "linear-gradient(135deg, #1e5837, #7da94b)",
     image: "assets/sambal-hijau.svg",
@@ -92,6 +99,7 @@ const defaultMenus = [
     category: "Minuman",
     description: "Teh manis dingin untuk menyeimbangkan rasa pedas.",
     price: 6000,
+    stock: 18,
     available: true,
     color: "linear-gradient(135deg, #b86828, #426b8f)",
     image: "assets/es-teh.svg",
@@ -102,6 +110,7 @@ const defaultMenus = [
     category: "Tambahan",
     description: "Tambahan nasi putih hangat.",
     price: 6000,
+    stock: 20,
     available: true,
     color: "linear-gradient(135deg, #f7f1df, #d49a2a)",
     image: "assets/nasi-tambah.svg",
@@ -166,7 +175,13 @@ function save(key, value) {
 function normalizeMenus(menus) {
   return menus.map((menu) => {
     const fresh = defaultMenus.find((item) => item.id === menu.id);
-    return fresh ? { ...fresh, ...menu, image: fresh.image, color: fresh.color } : menu;
+    const normalized = fresh ? { ...fresh, ...menu, image: fresh.image, color: fresh.color } : menu;
+    const stock = Number.isFinite(Number(normalized.stock))
+      ? Math.max(0, Number(normalized.stock))
+      : normalized.available
+        ? 10
+        : 0;
+    return { ...normalized, stock, available: stock > 0 && normalized.available !== false };
   });
 }
 
@@ -250,6 +265,14 @@ function bindCheckout() {
       createdAt: new Date().toISOString(),
     };
 
+    const stockIssue = getStockIssue(order.items);
+    if (stockIssue) {
+      showToast(`${stockIssue.name} hanya tersisa ${stockIssue.stock} porsi.`);
+      renderAll();
+      return;
+    }
+
+    reduceStock(order.items);
     state.orders.unshift(order);
     state.cart = [];
     save("padang_orders", state.orders);
@@ -313,7 +336,7 @@ function renderMenu() {
           </div>
           <div class="menu-card-body">
             <div class="price-row">
-              <span class="${statusClass}">${menu.available ? "Tersedia" : "Habis"}</span>
+              <span class="${statusClass}">${menu.available ? `Stok ${menu.stock}` : "Habis"}</span>
               <span class="price">${money(menu.price)}</span>
             </div>
             <h3>${menu.name}</h3>
@@ -343,6 +366,7 @@ function openItemDialog(menuId) {
   els.sambalOption.value = "Hijau";
   els.gravyOption.value = "Normal";
   els.itemQty.value = 1;
+  els.itemQty.max = menu.stock;
   els.itemNote.value = "";
   els.itemDialog.showModal();
 }
@@ -352,6 +376,11 @@ function addConfiguredItem() {
   if (!menu) return;
 
   const qty = Math.max(1, Number(els.itemQty.value || 1));
+  if (qty > menu.stock) {
+    showToast(`${menu.name} hanya tersisa ${menu.stock} porsi.`);
+    return;
+  }
+
   const item = {
     uid: `${menu.id}-${Date.now()}`,
     menuId: menu.id,
@@ -434,6 +463,13 @@ function renderCart() {
 }
 
 function updateQuantity(uid, delta) {
+  const currentItem = state.cart.find((item) => item.uid === uid);
+  const menu = state.menus.find((item) => item.id === currentItem?.menuId);
+  if (delta > 0 && menu && currentItem.quantity >= menu.stock) {
+    showToast(`${menu.name} hanya tersisa ${menu.stock} porsi.`);
+    return;
+  }
+
   state.cart = state.cart
     .map((item) => (item.uid === uid ? { ...item, quantity: item.quantity + delta } : item))
     .filter((item) => item.quantity > 0);
@@ -573,15 +609,28 @@ function renderStock() {
         <div class="stock-row">
           <div>
             <strong>${menu.name}</strong>
-            <span>${menu.category} - ${money(menu.price)}</span>
+            <span>${menu.category} - ${money(menu.price)} - Stok ${menu.stock}</span>
           </div>
+          <form class="stock-form" data-stock-form="${menu.id}">
+            <input type="number" min="1" value="1" aria-label="Jumlah stok ${menu.name}" />
+            <button type="submit">Tambah</button>
+          </form>
           <button type="button" data-stock="${menu.id}">
-            ${menu.available ? "Tersedia" : "Habis"}
+            ${menu.available ? "Tandai habis" : "Tandai tersedia"}
           </button>
         </div>
       `
     )
     .join("");
+
+  els.stockList.querySelectorAll("[data-stock-form]").forEach((form) => {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = form.querySelector("input");
+      addStock(form.dataset.stockForm, Number(input.value || 0));
+      input.value = 1;
+    });
+  });
 
   els.stockList.querySelectorAll("[data-stock]").forEach((button) => {
     button.addEventListener("click", () => toggleStock(button.dataset.stock));
@@ -589,10 +638,54 @@ function renderStock() {
 }
 
 function toggleStock(menuId) {
-  state.menus = state.menus.map((menu) => (menu.id === menuId ? { ...menu, available: !menu.available } : menu));
+  state.menus = state.menus.map((menu) => {
+    if (menu.id !== menuId) return menu;
+    const nextAvailable = !menu.available;
+    const nextStock = nextAvailable && menu.stock === 0 ? 1 : menu.stock;
+    return {
+      ...menu,
+      stock: nextStock,
+      available: nextAvailable && nextStock > 0,
+    };
+  });
   save("padang_menus", state.menus);
   renderAll();
   showToast("Status stok diperbarui.");
+}
+
+function addStock(menuId, amount) {
+  const addedStock = Math.max(1, Math.floor(amount));
+  state.menus = state.menus.map((menu) =>
+    menu.id === menuId ? { ...menu, stock: menu.stock + addedStock, available: true } : menu
+  );
+  save("padang_menus", state.menus);
+  renderAll();
+  showToast(`Stok ditambah ${addedStock} porsi.`);
+}
+
+function getStockIssue(items) {
+  const requested = new Map();
+  items.forEach((item) => requested.set(item.menuId, (requested.get(item.menuId) || 0) + item.quantity));
+
+  for (const [menuId, quantity] of requested.entries()) {
+    const menu = state.menus.find((item) => item.id === menuId);
+    if (!menu || !menu.available || quantity > menu.stock) {
+      return { name: menu?.name || "Menu", stock: menu?.stock || 0 };
+    }
+  }
+
+  return null;
+}
+
+function reduceStock(items) {
+  const ordered = new Map();
+  items.forEach((item) => ordered.set(item.menuId, (ordered.get(item.menuId) || 0) + item.quantity));
+
+  state.menus = state.menus.map((menu) => {
+    const remaining = Math.max(0, menu.stock - (ordered.get(menu.id) || 0));
+    return { ...menu, stock: remaining, available: remaining > 0 };
+  });
+  save("padang_menus", state.menus);
 }
 
 init();
