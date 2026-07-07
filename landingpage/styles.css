@@ -121,11 +121,34 @@ main {
   background: var(--line);
 }
 
+.sales-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--line);
+}
+
 .summary-band > div {
   display: grid;
   gap: 4px;
   padding: 16px;
   background: linear-gradient(135deg, #fff, #f6f3ea);
+}
+
+.sales-summary > div {
+  display: grid;
+  gap: 5px;
+  padding: 14px;
+  background: #fff;
+}
+
+.sales-summary strong {
+  color: var(--leaf-dark);
+  font-size: 1.1rem;
 }
 
 .customer-layout,
@@ -573,6 +596,7 @@ menu {
   }
 
   .summary-band,
+  .sales-summary,
   .form-grid {
     grid-template-columns: 1fr;
   }

@@ -141,6 +141,7 @@ const els = {
   subtotalText: document.querySelector("#subtotalText"),
   shippingText: document.querySelector("#shippingText"),
   totalText: document.querySelector("#totalText"),
+  salesSummary: document.querySelector("#salesSummary"),
   orderList: document.querySelector("#orderList"),
   adminOrders: document.querySelector("#adminOrders"),
   reportStats: document.querySelector("#reportStats"),
@@ -281,7 +282,7 @@ function bindCheckout() {
     document.querySelector("#customerName").value = "Afrianto";
     document.querySelector("#customerPhone").value = "081234567890";
     renderAll();
-    showToast(`Pesanan ${order.id} berhasil dibuat.`);
+    showToast(`Pesanan ${order.id} berhasil dibuat. Pendapatan masuk ${money(order.total)}.`);
   });
 }
 
@@ -484,6 +485,8 @@ function removeCartItem(uid) {
 }
 
 function renderOrders() {
+  renderSalesSummary();
+
   if (!state.orders.length) {
     els.orderList.innerHTML = `<article class="order-card"><p>Belum ada pesanan.</p></article>`;
     return;
@@ -493,6 +496,28 @@ function renderOrders() {
   els.orderList.querySelectorAll("[data-reorder]").forEach((button) => {
     button.addEventListener("click", () => reorder(button.dataset.reorder));
   });
+}
+
+function renderSalesSummary() {
+  const activeOrders = state.orders.filter((order) => order.status !== "Dibatalkan");
+  const completedOrders = state.orders.filter((order) => order.status === "Selesai");
+  const income = activeOrders.reduce((sum, order) => sum + order.total, 0);
+  const completedIncome = completedOrders.reduce((sum, order) => sum + order.total, 0);
+
+  els.salesSummary.innerHTML = `
+    <div>
+      <span class="label">Pendapatan masuk</span>
+      <strong>${money(income)}</strong>
+    </div>
+    <div>
+      <span class="label">Pesanan berhasil</span>
+      <strong>${activeOrders.length}</strong>
+    </div>
+    <div>
+      <span class="label">Pendapatan selesai</span>
+      <strong>${money(completedIncome)}</strong>
+    </div>
+  `;
 }
 
 function orderTemplate(order, admin = false) {
@@ -578,15 +603,18 @@ function updateOrderStatus(orderId, status) {
 
 function renderReport() {
   const completed = state.orders.filter((order) => order.status === "Selesai");
+  const activeOrders = state.orders.filter((order) => order.status !== "Dibatalkan");
+  const income = activeOrders.reduce((sum, order) => sum + order.total, 0);
   const revenue = completed.reduce((sum, order) => sum + order.total, 0);
   const canceled = state.orders.filter((order) => order.status === "Dibatalkan").length;
   const bestSeller = getBestSeller();
 
   els.reportStats.innerHTML = `
     <div class="stat-row"><span>Total pesanan</span><strong>${state.orders.length}</strong></div>
+    <div class="stat-row"><span>Pendapatan masuk</span><strong>${money(income)}</strong></div>
     <div class="stat-row"><span>Pesanan selesai</span><strong>${completed.length}</strong></div>
     <div class="stat-row"><span>Dibatalkan</span><strong>${canceled}</strong></div>
-    <div class="stat-row"><span>Pendapatan</span><strong>${money(revenue)}</strong></div>
+    <div class="stat-row"><span>Pendapatan selesai</span><strong>${money(revenue)}</strong></div>
     <div class="stat-row"><span>Menu terlaris</span><strong>${bestSeller}</strong></div>
   `;
 }
