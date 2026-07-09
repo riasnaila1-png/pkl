@@ -21,7 +21,36 @@
 
     <main>
       <section id="customerView" class="view active">
-        <div class="summary-band">
+        <section id="buyerLoginPanel" class="login-panel" aria-labelledby="buyerLoginTitle">
+          <form id="buyerLoginForm" class="login-form">
+            <div class="section-head compact">
+              <div>
+                <h2 id="buyerLoginTitle">Login pembeli</h2>
+                <p>Masuk untuk memilih menu, checkout, dan melihat riwayat pesanan.</p>
+              </div>
+            </div>
+            <label>
+              Username
+              <input id="buyerUsername" type="text" autocomplete="username" required />
+            </label>
+            <label>
+              Password
+              <input id="buyerPassword" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="primary-btn" type="submit">Masuk Pembeli</button>
+          </form>
+        </section>
+
+        <div id="buyerContent" class="hidden">
+          <div class="section-head">
+            <div>
+              <h2 id="buyerGreeting">Halo, pembeli</h2>
+              <p>Selamat datang kembali. Pilih menu favorit dan lanjutkan pemesanan.</p>
+            </div>
+            <button id="buyerLogoutBtn" type="button">Keluar</button>
+          </div>
+
+          <div class="summary-band">
           <div>
             <span class="label">Buka hari ini</span>
             <strong>08.00 - 21.00</strong>
@@ -36,7 +65,7 @@
           </div>
         </div>
 
-        <div class="customer-layout">
+          <div class="customer-layout">
           <section class="menu-area" aria-labelledby="menuTitle">
             <div class="section-head">
               <div>
@@ -101,11 +130,23 @@
               <button class="primary-btn" type="submit">Buat Pesanan</button>
             </form>
           </aside>
+          </div>
         </div>
       </section>
 
       <section id="ordersView" class="view">
-        <div class="section-head">
+        <section id="ordersLoginNotice" class="login-panel hidden">
+          <div class="section-head compact">
+            <div>
+              <h2>Login pembeli diperlukan</h2>
+              <p>Masuk sebagai pembeli untuk melihat status dan riwayat pesanan.</p>
+            </div>
+          </div>
+          <button class="primary-btn" type="button" data-go-login="buyer">Login Pembeli</button>
+        </section>
+
+        <div id="ordersContent" class="hidden">
+          <div class="section-head">
           <div>
             <h2>Status dan Riwayat Pesanan</h2>
             <p>Lihat status pesanan pelanggan dan lakukan pesan ulang dari riwayat.</p>
@@ -113,6 +154,7 @@
         </div>
         <div id="salesSummary" class="sales-summary"></div>
         <div id="orderList" class="order-list"></div>
+        </div>
       </section>
 
       <section id="adminView" class="view">
