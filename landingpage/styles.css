@@ -373,6 +373,11 @@ textarea {
   gap: 12px;
 }
 
+#buyerContent {
+  display: grid;
+  gap: 18px;
+}
+
 .checkout-form label,
 .login-form label,
 #itemForm label {
