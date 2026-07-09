@@ -18,6 +18,12 @@ const adminCredentials = {
   username: "admin",
   password: "admin123",
 };
+const buyerCredentials = {
+  username: "pembeli",
+  password: "pembeli123",
+  name: "Afrianto",
+  phone: "081234567890",
+};
 
 const defaultMenus = [
   {
@@ -125,6 +131,7 @@ const state = {
   menus: normalizeMenus(load("padang_menus", defaultMenus)),
   cart: load("padang_cart", []),
   orders: load("padang_orders", []),
+  buyer: load("padang_buyer_session", null),
   adminLoggedIn: load("padang_admin_logged_in", false),
   selectedCategory: "Semua",
   selectedMenu: null,
@@ -135,6 +142,13 @@ save("padang_menus", state.menus);
 const els = {
   tabs: document.querySelectorAll(".tab"),
   views: document.querySelectorAll(".view"),
+  buyerLoginPanel: document.querySelector("#buyerLoginPanel"),
+  buyerLoginForm: document.querySelector("#buyerLoginForm"),
+  buyerUsername: document.querySelector("#buyerUsername"),
+  buyerPassword: document.querySelector("#buyerPassword"),
+  buyerContent: document.querySelector("#buyerContent"),
+  buyerGreeting: document.querySelector("#buyerGreeting"),
+  buyerLogoutBtn: document.querySelector("#buyerLogoutBtn"),
   categoryFilters: document.querySelector("#categoryFilters"),
   menuGrid: document.querySelector("#menuGrid"),
   searchMenu: document.querySelector("#searchMenu"),
@@ -146,6 +160,8 @@ const els = {
   subtotalText: document.querySelector("#subtotalText"),
   shippingText: document.querySelector("#shippingText"),
   totalText: document.querySelector("#totalText"),
+  ordersLoginNotice: document.querySelector("#ordersLoginNotice"),
+  ordersContent: document.querySelector("#ordersContent"),
   salesSummary: document.querySelector("#salesSummary"),
   orderList: document.querySelector("#orderList"),
   adminLoginPanel: document.querySelector("#adminLoginPanel"),
@@ -245,6 +261,17 @@ function bindNavigation() {
     button.addEventListener("click", () => els.itemDialog.close());
   });
 
+  els.buyerLoginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    loginBuyer();
+  });
+
+  els.buyerLogoutBtn.addEventListener("click", logoutBuyer);
+
+  document.querySelectorAll("[data-go-login='buyer']").forEach((button) => {
+    button.addEventListener("click", () => switchView("customer"));
+  });
+
   els.adminLoginForm.addEventListener("submit", (event) => {
     event.preventDefault();
     loginAdmin();
@@ -256,6 +283,12 @@ function bindNavigation() {
 function bindCheckout() {
   els.checkoutForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    if (!state.buyer) {
+      showToast("Silakan login pembeli dulu.");
+      switchView("customer");
+      return;
+    }
+
     if (!state.cart.length) {
       showToast("Tambahkan menu ke keranjang dulu.");
       return;
@@ -270,6 +303,7 @@ function bindCheckout() {
 
     const order = {
       id: `ORD-${Date.now().toString().slice(-6)}`,
+      buyerUsername: state.buyer.username,
       customer: document.querySelector("#customerName").value.trim(),
       phone: document.querySelector("#customerPhone").value.trim(),
       fulfillment,
@@ -297,14 +331,14 @@ function bindCheckout() {
     save("padang_orders", state.orders);
     save("padang_cart", state.cart);
     els.checkoutForm.reset();
-    document.querySelector("#customerName").value = "Afrianto";
-    document.querySelector("#customerPhone").value = "081234567890";
+    fillBuyerProfile();
     renderAll();
     showToast(`Pesanan ${order.id} berhasil dibuat. Pendapatan masuk ${money(order.total)}.`);
   });
 }
 
 function renderAll() {
+  renderBuyer();
   renderFilters();
   renderMenu();
   renderCart();
@@ -505,20 +539,29 @@ function removeCartItem(uid) {
 function renderOrders() {
   renderSalesSummary();
 
-  if (!state.orders.length) {
+  els.ordersLoginNotice.classList.toggle("hidden", Boolean(state.buyer));
+  els.ordersContent.classList.toggle("hidden", !state.buyer);
+
+  if (!state.buyer) {
+    return;
+  }
+
+  const buyerOrders = getBuyerOrders();
+  if (!buyerOrders.length) {
     els.orderList.innerHTML = `<article class="order-card"><p>Belum ada pesanan.</p></article>`;
     return;
   }
 
-  els.orderList.innerHTML = state.orders.map(orderTemplate).join("");
+  els.orderList.innerHTML = buyerOrders.map(orderTemplate).join("");
   els.orderList.querySelectorAll("[data-reorder]").forEach((button) => {
     button.addEventListener("click", () => reorder(button.dataset.reorder));
   });
 }
 
 function renderSalesSummary() {
-  const activeOrders = state.orders.filter((order) => order.status !== "Dibatalkan");
-  const completedOrders = state.orders.filter((order) => order.status === "Selesai");
+  const orders = state.buyer ? getBuyerOrders() : [];
+  const activeOrders = orders.filter((order) => order.status !== "Dibatalkan");
+  const completedOrders = orders.filter((order) => order.status === "Selesai");
   const income = activeOrders.reduce((sum, order) => sum + order.total, 0);
   const completedIncome = completedOrders.reduce((sum, order) => sum + order.total, 0);
 
@@ -580,7 +623,7 @@ function statusButtons(order) {
 }
 
 function reorder(orderId) {
-  const order = state.orders.find((item) => item.id === orderId);
+  const order = getBuyerOrders().find((item) => item.id === orderId);
   if (!order) return;
   state.cart = order.items.map((item) => ({ ...item, uid: `${item.menuId}-${Date.now()}-${Math.random()}` }));
   save("padang_cart", state.cart);
@@ -592,6 +635,62 @@ function reorder(orderId) {
 function switchView(viewName) {
   const tab = [...els.tabs].find((item) => item.dataset.view === viewName);
   tab?.click();
+}
+
+function loginBuyer() {
+  const username = els.buyerUsername.value.trim();
+  const password = els.buyerPassword.value;
+
+  if (username !== buyerCredentials.username || password !== buyerCredentials.password) {
+    showToast("Username atau password pembeli salah.");
+    els.buyerPassword.value = "";
+    els.buyerPassword.focus();
+    return;
+  }
+
+  state.buyer = {
+    username: buyerCredentials.username,
+    name: buyerCredentials.name,
+    phone: buyerCredentials.phone,
+  };
+  save("padang_buyer_session", state.buyer);
+  els.buyerLoginForm.reset();
+  fillBuyerProfile();
+  renderAll();
+  showToast("Login pembeli berhasil.");
+}
+
+function logoutBuyer() {
+  state.buyer = null;
+  state.cart = [];
+  save("padang_buyer_session", null);
+  save("padang_cart", state.cart);
+  renderAll();
+  showToast("Pembeli sudah keluar.");
+}
+
+function renderBuyer() {
+  const isLoggedIn = Boolean(state.buyer);
+  els.buyerLoginPanel.classList.toggle("hidden", isLoggedIn);
+  els.buyerContent.classList.toggle("hidden", !isLoggedIn);
+
+  if (!isLoggedIn) {
+    return;
+  }
+
+  els.buyerGreeting.textContent = `Halo, ${state.buyer.name}`;
+  fillBuyerProfile();
+}
+
+function fillBuyerProfile() {
+  if (!state.buyer) return;
+  document.querySelector("#customerName").value = state.buyer.name;
+  document.querySelector("#customerPhone").value = state.buyer.phone;
+}
+
+function getBuyerOrders() {
+  if (!state.buyer) return [];
+  return state.orders.filter((order) => order.buyerUsername === state.buyer.username);
 }
 
 function loginAdmin() {
