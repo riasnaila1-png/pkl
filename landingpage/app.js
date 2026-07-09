@@ -14,6 +14,10 @@ const orderStatuses = [
   "Selesai",
   "Dibatalkan",
 ];
+const adminCredentials = {
+  username: "admin",
+  password: "admin123",
+};
 
 const defaultMenus = [
   {
@@ -121,6 +125,7 @@ const state = {
   menus: normalizeMenus(load("padang_menus", defaultMenus)),
   cart: load("padang_cart", []),
   orders: load("padang_orders", []),
+  adminLoggedIn: load("padang_admin_logged_in", false),
   selectedCategory: "Semua",
   selectedMenu: null,
 };
@@ -143,6 +148,12 @@ const els = {
   totalText: document.querySelector("#totalText"),
   salesSummary: document.querySelector("#salesSummary"),
   orderList: document.querySelector("#orderList"),
+  adminLoginPanel: document.querySelector("#adminLoginPanel"),
+  adminLoginForm: document.querySelector("#adminLoginForm"),
+  adminUsername: document.querySelector("#adminUsername"),
+  adminPassword: document.querySelector("#adminPassword"),
+  adminContent: document.querySelector("#adminContent"),
+  adminLogoutBtn: document.querySelector("#adminLogoutBtn"),
   adminOrders: document.querySelector("#adminOrders"),
   reportStats: document.querySelector("#reportStats"),
   stockList: document.querySelector("#stockList"),
@@ -233,6 +244,13 @@ function bindNavigation() {
   document.querySelectorAll("[data-close-dialog]").forEach((button) => {
     button.addEventListener("click", () => els.itemDialog.close());
   });
+
+  els.adminLoginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    loginAdmin();
+  });
+
+  els.adminLogoutBtn.addEventListener("click", logoutAdmin);
 }
 
 function bindCheckout() {
@@ -576,7 +594,39 @@ function switchView(viewName) {
   tab?.click();
 }
 
+function loginAdmin() {
+  const username = els.adminUsername.value.trim();
+  const password = els.adminPassword.value;
+
+  if (username !== adminCredentials.username || password !== adminCredentials.password) {
+    showToast("Username atau password admin salah.");
+    els.adminPassword.value = "";
+    els.adminPassword.focus();
+    return;
+  }
+
+  state.adminLoggedIn = true;
+  save("padang_admin_logged_in", true);
+  els.adminLoginForm.reset();
+  renderAdmin();
+  showToast("Login admin berhasil.");
+}
+
+function logoutAdmin() {
+  state.adminLoggedIn = false;
+  save("padang_admin_logged_in", false);
+  renderAdmin();
+  showToast("Admin sudah keluar.");
+}
+
 function renderAdmin() {
+  els.adminLoginPanel.classList.toggle("hidden", state.adminLoggedIn);
+  els.adminContent.classList.toggle("hidden", !state.adminLoggedIn);
+
+  if (!state.adminLoggedIn) {
+    return;
+  }
+
   renderAdminOrders();
   renderReport();
   renderStock();

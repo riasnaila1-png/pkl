@@ -211,6 +211,7 @@ textarea {
 .order-card,
 .report-panel,
 .stock-panel,
+.login-panel,
 .cart-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -308,7 +309,8 @@ textarea {
 
 .cart-panel,
 .report-panel,
-.stock-panel {
+.stock-panel,
+.login-panel {
   padding: 16px;
 }
 
@@ -362,7 +364,17 @@ textarea {
   border-top: 1px solid var(--line);
 }
 
+.login-panel {
+  width: min(440px, 100%);
+}
+
+.login-form {
+  display: grid;
+  gap: 12px;
+}
+
 .checkout-form label,
+.login-form label,
 #itemForm label {
   display: grid;
   gap: 6px;

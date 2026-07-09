@@ -116,13 +116,34 @@
       </section>
 
       <section id="adminView" class="view">
-        <div class="admin-grid">
+        <section id="adminLoginPanel" class="login-panel" aria-labelledby="adminLoginTitle">
+          <form id="adminLoginForm" class="login-form">
+            <div class="section-head compact">
+              <div>
+                <h2 id="adminLoginTitle">Login admin</h2>
+                <p>Masuk untuk mengelola pesanan, laporan, dan stok menu.</p>
+              </div>
+            </div>
+            <label>
+              Username
+              <input id="adminUsername" type="text" autocomplete="username" required />
+            </label>
+            <label>
+              Password
+              <input id="adminPassword" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="primary-btn" type="submit">Masuk Admin</button>
+          </form>
+        </section>
+
+        <div id="adminContent" class="admin-grid hidden">
           <section>
             <div class="section-head">
               <div>
                 <h2>Dashboard admin</h2>
                 <p>Terima, proses, batalkan, dan selesaikan pesanan.</p>
               </div>
+              <button id="adminLogoutBtn" type="button">Keluar</button>
             </div>
             <div id="adminOrders" class="order-list"></div>
           </section>
